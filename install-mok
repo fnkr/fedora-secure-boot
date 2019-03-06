@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e -u
+openssl req -new -x509 -newkey rsa:2048 -keyout MOK.key -outform DER -out MOK.der -nodes -days 36500 -subj "/CN=${1}/"
+mokutil --import MOK.der

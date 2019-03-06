@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+keyctl list %:.secondary_trusted_keys
