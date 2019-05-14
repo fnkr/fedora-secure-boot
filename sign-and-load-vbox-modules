@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -e -u -o pipefail
+
+# Sign vboxdrv module for all installed kernels
+# This will generate and execute commands like this one (one per kernel and kernel object):
+# /usr/src/kernels/$(uname -r)/scripts/sign-file sha256 MOK.key MOK.der /lib/modules/$(uname -r)/extra/VirtualBox/vboxnetadp.ko
+
+rpm -qa kernel \
+| sed s/^kernel-// \
+| xargs -i% modinfo -k % -n vboxdrv \
+| xargs dirname \
+| xargs -i% find % -mindepth 1 -maxdepth 1 -name \*.ko \
+| sed -E 's:^(/lib/modules/([^/]+)/.*)$:/usr/src/kernels/\2/scripts/sign-file sha256 MOK.key MOK.der \1:' \
+| xargs -i% sh -c %
+
+
+# Load modules for current kernel
+# This will generate and execute commands like this one (one per kernel object):
+# insmod /lib/modules/$(uname -r)/extra/VirtualBox/vboxnetadp.ko
+
+ls "$(dirname "$(modinfo -n vboxdrv)")"/*.ko \
+| grep -v /vboxsf\\.ko$ \
+| xargs -n1 insmod

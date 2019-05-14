@@ -12,8 +12,8 @@ cd secure-boot
 sudo ./install-mok YOUR_NAME
 
 # Sign kernel modules with the newly generated MOK
-# This is an example which will sign VirtualBox kernel modules:
-sudo ./sign-vbox-modules
+# This is an example which will sign and load VirtualBox kernel modules:
+sudo ./sign-and-load-vbox-modules
 
 # Reboot to finish the MOK import
 sudo reboot

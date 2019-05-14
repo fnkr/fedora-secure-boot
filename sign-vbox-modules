@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-set -e -u
-for modfile in $(dirname $(modinfo -n vboxdrv))/*.ko; do
-  echo Signing $modfile
-  /usr/src/kernels/$(uname -r)/scripts/sign-file sha256 MOK.key MOK.der "$modfile"
-done
